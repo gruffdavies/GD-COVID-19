@@ -1,4 +1,11 @@
-# Code and data used to analyse the COVID-19 (SARS-COV-2) pandemic by Dr Gareth Davies (Gruff Davies).
+# Code and data used to analyse the COVID-19 (SARS-COV-2) pandemic by Dr Gareth Davies (Gruff Davies). 
+
+Results published in 2 papers:
+1. "The Epidemic Severity Index - Estimating Relative Local Severity of Novel Disease Outbreaks", Davies G
+https://doi.org/10.1101/2020.04.23.20077685
+
+2. "Evidence Supports a Causal Model for Vitamin D in COVID-19 Outcomes", Davies G, Garami AR, Byers JC 
+https://doi.org/{doi-tbc}
 
 ## Code
 Code is written in Matlab. 
