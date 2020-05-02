@@ -20,4 +20,4 @@ World population 2020 by latitude from Center for International Earth Science In
 * t: @gruffdavies
 
 ## Terms of Use
-This GitHub repo is provided to the public for peer-review, educational and academic research purposes. All code and analyses are copyright Gruff Davies 2020 except where comments in the code specify specify that copyright belongs to another author. All rights are reserved. 
+This GitHub repo is provided to the public for peer-review, educational and academic research purposes. All code and analyses are copyright Gruff Davies 2020 except where comments in the code specify specify that copyright belongs to another author. All rights are reserved. Please contact me if you wish to use any of the figures or results in this repo.
