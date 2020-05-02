@@ -5,16 +5,17 @@
 setUpRegions;
 
 % choose regions:
-regions = regionsC;
+regions = regionsA;
 
-baseFileName = G.pathFigures+'20200501-ESI-six-regions';
+% baseFileName = G.pathFigures+'20200502-ESI-six-regions';
+baseFileName = G.pathFigures+'\ESI\20200410-ESI-six-regions';
 
 plotPortrait = true;
 
 % set to true to use zeroDayOffsets
 plotRelativeStates = [false true];
-% aS_RD  = [4.4 6.5 13];
-aS_RD  = [6.5];
+aS_RD  = [4.4 6.5 13];
+% aS_RD  = [6.5];
 
 % plotRelativeStates = [true];
 % aS_RD  = [6.5];

@@ -34,15 +34,29 @@ G.aDeaths       = table2array(G.tsDeaths);
 G.aRecovered    = table2array(G.tsRecovered);
 G.aDates        = table2array(G.tsDates);
 
+s_rd   = 6.5; % outbreaks at least 2X worse than flu 
+
 % [67 x 239]:
 G.tsTotals        = array2table(G.aDeaths+G.aRecovered,'VariableNames',G.tsDeaths.Properties.VariableNames());
-% [1 x 239]:
-G.tFirstReportDate = array2table(findFirstDateGreaterThanThreshold(table2array(G.tsTotals),G.aDates,0),'VariableNames',G.tsTotals.Properties.VariableNames());
+
+% [1 x 239]: first EITHER death or recovery
+G.tFirstReportDateA  = array2table(findFirstDateGreaterThanThreshold(table2array(G.tsTotals),G.aDates,0),'VariableNames',G.tsTotals.Properties.VariableNames());
+
+G.tFirst_1_Death     = array2table(findFirstDateGreaterThanThreshold(G.aDeaths,G.aDates,0),'VariableNames',G.tsTotals.Properties.VariableNames());
+G.tFirst_S_RD_Recov  = array2table(findFirstDateGreaterThanThreshold(G.aRecovered,G.aDates,s_rd),'VariableNames',G.tsTotals.Properties.VariableNames());
+A = [G.tFirst_1_Death; G.tFirst_S_RD_Recov];
+
+G.tFirstReportDateB = array2table(min(table2array(A)),'VariableNames',G.tsTotals.Properties.VariableNames());
+
 % [67 x 239]:
-G.tsZeroDayOffsets  = calculateZeroDayOffsets(G.aDates, G.tFirstReportDate);
+G.tsZeroDayOffsetsA    = calculateZeroDayOffsets(G.aDates, G.tFirstReportDateA);
+G.tsZeroDayOffsetsB   = calculateZeroDayOffsets(G.aDates, G.tFirstReportDateB);
+
+% choose which condition to use for day zero:
+G.tFirstReportDate = G.tFirstReportDateB;
+G.tsZeroDayOffsets = G.tsZeroDayOffsetsB;
 
 % calculate ESI time series for all locations:
-s_rd   = 6.5; % outbreaks at least 2X worse than flu 
 % [67 x 239]
 G.aESI = f_ESI(G.tsDeaths, G.tsRecovered,s_rd); 
 [NDates, NLocs] = size(G.aESI);

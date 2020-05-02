@@ -75,27 +75,27 @@ function PlotSeveritySixRegionsParameterised(S_RD, plotRelative, plotPortrait, s
     leg_loc_inside    = 'southeast';
         
     % override defaults for China - lots to fit
-    % switch i 
-    %   case  1
-    %     fontsize          = 6;
-    %     num_cols_inside   = 2;
-    %     num_cols_outside  = 2;
-    %     leg_loc_inside    = 'southeast';
-    %   case 5
-    %     fontsize          = 9;
-    %     num_cols_inside   = 2;
-    %     num_cols_outside  = 2;
-    %     if plotRelative
-    %       leg_loc_inside    = 'southeast';
-    %     else
-    %       leg_loc_inside    = 'southeast';
-    %     end
-    %   otherwise
-    %     fontsize          = 9;
-    %     num_cols_inside   = 2;
-    %     num_cols_outside  = 1;
-    %     leg_loc_inside    = 'southeast';
-    % end
+    switch i 
+      case  1
+        fontsize          = 6;
+        num_cols_inside   = 2;
+        num_cols_outside  = 2;
+        leg_loc_inside    = 'southeast';
+      case 5
+        fontsize          = 9;
+        num_cols_inside   = 2;
+        num_cols_outside  = 2;
+        if plotRelative
+          leg_loc_inside    = 'southeast';
+        else
+          leg_loc_inside    = 'southeast';
+        end
+      otherwise
+        fontsize          = 9;
+        num_cols_inside   = 2;
+        num_cols_outside  = 1;
+        leg_loc_inside    = 'southeast';
+    end
 
     % leg_loc = 'northeast';
     % num_cols = 1;
