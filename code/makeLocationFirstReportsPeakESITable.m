@@ -1,10 +1,14 @@
 function T = makeLocationFirstReportsPeakESITable(F, E, L)
+% 
+% F: (1 x N) table of location first report dates 
+% E: (1 x N) table of Peak ESI values 
+% L: (N x 3) table of location coordinates 
   
   F_ = rows2vars(F);
   F_.Properties.VariableNames = {'Location', 'FirstReportDate'};
 
   E_ = rows2vars(E);
-  E_.Properties.VariableNames = {'Location', 'ESI'};
+  E_.Properties.VariableNames = {'Location', 'ESI'}; % NB: column name is important, used by plotGeobubble()
 
   L_ = sortrows(L);
   F_ = sortrows(F_);

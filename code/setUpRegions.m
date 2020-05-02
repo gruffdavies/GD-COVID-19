@@ -1,6 +1,11 @@
-regions = {};
+global regions;
+global regionsA;
+global regionsB;
+global regionsC;
 
-regions{1}  = ...
+regionsA = {};
+
+regionsA{1}  = ...
     { 'Hubei_China'        ,...
       'Anhui_China'        ,...
       'Beijing_China'      ,...
@@ -35,9 +40,9 @@ regions{1}  = ...
       'Yunnan_China'       ,...
       'Zhejiang_China' };    
 
-regions{2} = {'Japan', 'Thailand', 'Vietnam', 'Philippines', 'Cambodia'};
+regionsA{2} = {'Japan', 'Thailand', 'Vietnam', 'Philippines', 'Cambodia'};
 
-regions{3}  = {'Tasmania_Australia'                 ,...
+regionsA{3}  = {'Tasmania_Australia'                 ,...
                   'Victoria_Australia'                  ,...
                   'AustralianCapitalTerritory_Australia',...
                   'SouthAustralia_Australia'            ,...
@@ -46,11 +51,39 @@ regions{3}  = {'Tasmania_Australia'                 ,...
                   'Queensland_Australia'                ,...
                   'NorthernTerritory_Australia' ,'NewZealand' };
 
-regions{4} = {'Malaysia', 'Singapore', 'SriLanka'};
+regionsA{4} = {'Malaysia', 'Singapore', 'SriLanka'};
 
 
-regions{5} = {'Italy', 'Spain', 'UK', 'US', 'Germany', 'Israel', 'France', 'Denmark', 'Sweden','Norway','Poland','Finland', 'Canada'};
+regionsA{5} = {'Italy', 'Spain', 'UK', 'US', 'Germany', 'Israel', 'France', 'Denmark', 'Sweden','Norway','Poland','Finland', 'Canada'};
 
-regions{6} = { 'SouthAfrica','Venezuela','Brazil','Argentina','Paraguay'};
+regionsA{6} = { 'SouthAfrica','Venezuela','Brazil','Argentina','Paraguay'};
 
 regions;
+
+regionsB = {};
+regionsC = {};
+
+regionsB{1}  = ...
+    { 'Hubei_China', 'Japan', 'Thailand', 'NewSouthWales_Australia', 'Vietnam', 'Philippines', 'Cambodia'};
+
+regionsB{2}  = {'Taiwan_', 'Korea_South', 'Malaysia', 'SriLanka','Singapore'}; 
+
+regionsB{3}  = {'US', 'Finland', 'Canada', 'UK', 'France', 'Nepal'};
+
+regionsB{4}  = {'UnitedArabEmirates', 'Cambodia', 'Germany', 'Victoria_Australia', 'Spain'};
+
+
+regionsB{5} = {'India', 'Belgium', 'SouthAustralia_Australia', 'Iran', 'Italy', 'Queensland_Australia' };
+
+
+regionsB{6} = {'Israel', 'Egypt', 'Oman', 'WesternAustralia_Australia', 'Switzerland', 'Mexico'};
+
+
+regionsC{1}  = {'Finland', 'Canada', 'UK', 'Germany', 'Belgium', 'Switzerland'};
+regionsC{2} = {'France', 'Italy', 'Spain', 'US', 'Japan'};
+regionsC{3} = {'Korea_South', 'Iran', 'Hubei_China', 'Israel', 'Nepal', 'Egypt'};
+regionsC{4} = {'UnitedArabEmirates', 'Taiwan_', 'Mexico', 'India', 'Oman'};
+regionsC{5} = {'Vietnam', 'Thailand', 'Philippines', 'Cambodia', 'SriLanka', 'Malaysia'};
+regionsC{6} = {'Singapore', 'Queensland_Australia' , 'WesternAustralia_Australia', 'NewSouthWales_Australia', 'SouthAustralia_Australia', 'Victoria_Australia'};
+
+regions = regionsA;

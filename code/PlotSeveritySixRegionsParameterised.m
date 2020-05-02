@@ -1,13 +1,17 @@
 function PlotSeveritySixRegionsParameterised(S_RD, plotRelative, plotPortrait, saveAsFilename)
   global G;
   global S;  
+  global regions;
   setUpColours;
   
-  locs = S.locsD;
-  D = G.tDeaths_new;
-  R = G.tRecovered;
+  % locs = S.locsD;
+  % D = G.tDeaths_new;
+  % R = G.tRecovered;
 
-  setUpRegions;
+  D = G.tsDeaths;
+  R = G.tsRecovered;
+  locs = D.Properties.VariableNames();
+
 
   % contains a set of six regions each a set of locations 
   Nplots = numel(regions); % = 6
@@ -28,16 +32,16 @@ function PlotSeveritySixRegionsParameterised(S_RD, plotRelative, plotPortrait, s
     % get the countries for this region
     locations = regions{i};
 
-    countryLabels = cellfun(@extractBeforeUnderscore,locations,'UniformOutput',false);
+    countryLabels = cellfun(@extractBeforeUnderscore,locations,'UniformOutput',false)
 
     d = D(:,locations);
     r = R(:,locations);
     [ESI_timeseries, severity_integrated]  = f_ESI(d, r, S_RD); % Epidemic Severity Index function
 
     % filtered table of zero day offsets for the selected countries in this region
-    tDayOffsets = S.zeroDayOffsets(:,locations);
+    tsDayOffsets = G.tsZeroDayOffsets(:,locations);
     % convert to array
-    aDayOffsets = table2array(tDayOffsets);
+    aDayOffsets = table2array(tsDayOffsets);
 
     % h = subplot(Nplots/2,2,i);
     % h = subplot(Nplots,1,i);
@@ -51,7 +55,7 @@ function PlotSeveritySixRegionsParameterised(S_RD, plotRelative, plotPortrait, s
       uberPrefix = "ESI Relative to Day Zero; "
     else
       % note X is a vector here (all dates same)
-      plot(S.dates, ESI_timeseries, 'LineWidth',2);
+      plot(G.aDates, ESI_timeseries, 'LineWidth',2);
       uberPrefix = "ESI by Date; "
     end
     % grid(gca,'minor')
@@ -65,29 +69,33 @@ function PlotSeveritySixRegionsParameterised(S_RD, plotRelative, plotPortrait, s
       h.CurrentAxes.XAxis.Limits = [0 70];
     end
 
-
+    fontsize          = 9;
+    num_cols_inside   = 2;
+    num_cols_outside  = 1;
+    leg_loc_inside    = 'southeast';
+        
     % override defaults for China - lots to fit
-    switch i 
-      case  1
-        fontsize          = 6;
-        num_cols_inside   = 2;
-        num_cols_outside  = 2;
-        leg_loc_inside    = 'northeast';
-      case 5
-        fontsize          = 9;
-        num_cols_inside   = 2;
-        num_cols_outside  = 2;
-        if plotRelative
-          leg_loc_inside    = 'southwest';
-        else
-          leg_loc_inside    = 'southwest';
-        end
-      otherwise
-        fontsize          = 9;
-        num_cols_inside   = 2;
-        num_cols_outside  = 1;
-        leg_loc_inside    = 'north';
-    end
+    % switch i 
+    %   case  1
+    %     fontsize          = 6;
+    %     num_cols_inside   = 2;
+    %     num_cols_outside  = 2;
+    %     leg_loc_inside    = 'southeast';
+    %   case 5
+    %     fontsize          = 9;
+    %     num_cols_inside   = 2;
+    %     num_cols_outside  = 2;
+    %     if plotRelative
+    %       leg_loc_inside    = 'southeast';
+    %     else
+    %       leg_loc_inside    = 'southeast';
+    %     end
+    %   otherwise
+    %     fontsize          = 9;
+    %     num_cols_inside   = 2;
+    %     num_cols_outside  = 1;
+    %     leg_loc_inside    = 'southeast';
+    % end
 
     % leg_loc = 'northeast';
     % num_cols = 1;

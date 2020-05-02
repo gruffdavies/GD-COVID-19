@@ -6,7 +6,7 @@ S = {}; % short name aliases for convenience
 % setup paths
 G.pathFigures       = "..\figures\";
 G.pathDataPop       = "..\data\population\";
-G.pathDataCoord     = "..\data\coordinates\";
+% G.pathDataCoord     = "..\data\coordinates\";
 G.pathDataJH        = "..\data\JH\";
 G.pathDataJH_0328   = G.pathDataJH + "20200328-JHTS\";
 G.pathDataJH_0409   = G.pathDataJH + "20200409-JHTS\";
@@ -34,33 +34,51 @@ G.aDeaths       = table2array(G.tsDeaths);
 G.aRecovered    = table2array(G.tsRecovered);
 G.aDates        = table2array(G.tsDates);
 
+% [67 x 239]:
 G.tsTotals        = array2table(G.aDeaths+G.aRecovered,'VariableNames',G.tsDeaths.Properties.VariableNames());
-G.firstReportDate = array2table(findFirstDateGreaterThanThreshold(table2array(G.tsTotals),G.aDates,0),'VariableNames',G.tsTotals.Properties.VariableNames());
-G.zeroDayOffsets  = calculateZeroDayOffsets(G.aDates, G.firstReportDate);
+% [1 x 239]:
+G.tFirstReportDate = array2table(findFirstDateGreaterThanThreshold(table2array(G.tsTotals),G.aDates,0),'VariableNames',G.tsTotals.Properties.VariableNames());
+% [67 x 239]:
+G.tsZeroDayOffsets  = calculateZeroDayOffsets(G.aDates, G.tFirstReportDate);
 
-s_rd = 6.5; % outbreaks at least 2X worse than flu 
-G.aESI    = f_ESI(G.tsDeaths, G.tsRecovered,s_rd);
+% calculate ESI time series for all locations:
+s_rd   = 6.5; % outbreaks at least 2X worse than flu 
+% [67 x 239]
+G.aESI = f_ESI(G.tsDeaths, G.tsRecovered,s_rd); 
+[NDates, NLocs] = size(G.aESI);
+% determine the max, min and latest ESI values per location
+% the timeseries data is per location, with time going down and locations across
+G.aPeakESI    = max(G.aESI); %NB: countries that go negative immediately will be shown as zero
+G.tPeakESI    = array2table(G.aPeakESI,'VariableNames',G.tsRecovered.Properties.VariableNames());
+G.aMinESI     = min(G.aESI); % not used but just in case 
+G.aLastESI    = G.aESI(NDates,:); 
+G.tLastESI    = array2table(G.aLastESI,'VariableNames',G.tsRecovered.Properties.VariableNames());
+G.aLastDeaths = G.aDeaths(NDates,:); 
+G.tLastDeaths = array2table(G.aLastDeaths,'VariableNames',G.tsRecovered.Properties.VariableNames());
+G.aLastRecovs = G.aRecovered(NDates,:); 
+G.tLastRecovs = array2table(G.aLastRecovs,'VariableNames',G.tsRecovered.Properties.VariableNames());
 
-% the timseries data is per location, with time going down and locations across
-G.aPeakESI = max(G.aESI); %NB: countries that go negative immediately will be shown as zero
-G.aMinESI  = min(G.aESI); 
-G.tPeakESI = array2table(G.aPeakESI,'VariableNames',G.tsRecovered.Properties.VariableNames());
 
-E_  = makeLocationFirstReportsPeakESITable(G.firstReportDate, G.tPeakESI, G.tLocationCoords);
+% for plotGeobubble
+E_  = makeLocationFirstReportsPeakESITable(G.tFirstReportDate, G.tPeakESI, G.tLocationCoords);
 E_.S_RD         = s_rd .* ones(height(E_),1);
 E_.ESI_abs      = abs(E_.ESI(:));        % add abs(ESI) for plotting (can't plot negatives)
 E_.TentoESI_abs = 10.^E_.ESI_abs(:);     % add linearised log values
-G.tLocationFirstReportsPeakESI = E_;
+G.tLocationFirstReportsPeakESI = E_; clear E_;
 
-% G.tLocationFirstReports         = makeLocationFirstReportsTable(G.firstReportDate, G.tLocationCoords);
+% for export to xlsx
+TC_ = combineFirstReportsPeakESILatestESIAndLocationsTables(G.tFirstReportDate, G.tPeakESI, G.tLastESI, G.tLastDeaths, G.tLastRecovs, G.tLocationCoords);
+writetable(TC_, "..\data\FirstReportsPeakESILastESIDeathsRecoveries_0328.xlsx");
+G.tFirstReportsPeakAndLastESI = TC_; clear TC_;
 
 % Second data set up to 9th April
 % SINGLE DATE
 G.tDeaths_0409_unrec     = readtable(G.pathDataJH_0409 + "20200409-covid19_deaths-table.xlsx",'Sheet','data');
 G.tRecovered_0409_unrec  = readtable(G.pathDataJH_0409 + "20200409-covid19_recoveries-table.xlsx",'Sheet','data');
+% sort out the Canada mess
 [G.tDeaths_0409 G.tRecovered_0409] = reconcileDeathsRecoveredTableData(G.tDeaths_0409_unrec, G.tRecovered_0409_unrec); 
-G.TC = makeDeathsRecoveredESITable(G.tDeaths_0409, G.tRecovered_0409, s_rd);
 
+G.TC = calculateAndConstructESITableFromTwoVerticalDAndRTables(G.tDeaths_0409, G.tRecovered_0409, s_rd);
 
 % CSV Timeseries
 G.csvDeaths0411     = readtable(G.pathDataJH_0411 + "time_series_covid19_deaths_global.csv");
@@ -69,12 +87,12 @@ G.csvRecovered0411  = readtable(G.pathDataJH_0411 + "time_series_covid19_recover
 D       = readtable(G.pathDataJH_0411 + "time_series_covid19_deaths_global.xlsx", 'ReadVariableNames', true, 'datetime','text');
 xlDates = datetime(D{1,4:size(D,2)},'ConvertFrom','excel');
 D(1,:)  = [];
-G.xlDeaths0411 = D;
+G.xlDeaths0411 = D; clear D;
 
 R       = readtable(G.pathDataJH_0411 + "time_series_covid19_recovered_global.xlsx", 'ReadVariableNames', true, 'datetime','text');
 % xlDates = datetime(D{1,4:size(D,2)},'ConvertFrom','excel');
 R(1,:)  = [];
-G.xlRecovered0411 = R;
+G.xlRecovered0411 = R; clear R;
 
 
 % % create arrays from table data

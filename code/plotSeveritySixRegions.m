@@ -2,13 +2,19 @@
 
 % deathsSensitivityScale, minRecoveriesToDeathsRatio, saveAsFilename
 
-baseFileName = 'figures\20200410-ESI-six-regions';
+setUpRegions;
+
+% choose regions:
+regions = regionsC;
+
+baseFileName = G.pathFigures+'20200501-ESI-six-regions';
 
 plotPortrait = true;
 
 % set to true to use zeroDayOffsets
 plotRelativeStates = [false true];
-aS_RD  = [4.4 6.5 13];
+% aS_RD  = [4.4 6.5 13];
+aS_RD  = [6.5];
 
 % plotRelativeStates = [true];
 % aS_RD  = [6.5];
@@ -20,9 +26,9 @@ for i = 1:numel(plotRelativeStates)
   plotRelative = plotRelativeStates(i);
 
   if plotRelative
-    strRel = "relativeto-dayzero";
+    strRel = "rel-day0";
   else
-    strRel = "absolute-date";
+    strRel = "by-date";
   end
 
 
